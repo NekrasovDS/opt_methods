@@ -1,0 +1,275 @@
+\documentclass{book}
+
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+	 tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\setmainfont{Roboto-Light}
+
+\begin{document}
+
+	\section{Метод дихотомии}
+	
+	$ f( x ) \to \min_{x \in \mathbb{R} } ( x )  $ 
+
+	Метод дихотомии - это метод деления отрезка почти пополам.
+	Найдем минимум на $ [ a_0,b_0 ]  $.
+
+	
+	\includegraphics[scale=0.2]{1}
+	
+	Суть метоода в последовательном уменьшении отрезка локализации.
+	Задаем количество шагов $ N $ и точность $ \varepsilon > 0 $.
+	Задаем также 
+	\begin{equation} 
+		\begin{aligned} 
+		x_0 = \frac{ a+b }{ 2 } - \frac{ \delta  }{ 2 } \\
+			y_0 = \frac{ a+b }{ 2 } + \frac{ \delta  }{ 2 } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	\begin{enumerate}
+		\item Если $ f( x_0 ) < f( y_0 )  $, тогда $ x^{*} \in [ a_0,y_0 ]  $ и обозначаем
+			$ a_1 = a_0, b_1 = y_0 $ 
+		\item Если $ f( x_0 ) > f( y_0 )  $, тогда $ x^{*} \in [ x_0,b_0 ]  $ и обозначаем
+			$ a_1 = x_0, b_1=b_0 $ 
+	\end{enumerate}
+	таким образом $ x^{*} \in [ a_1,b_1 ]  $. Тогда 
+	\begin{equation} 
+		\begin{aligned} 
+		b_1 - a_1 = y_0 - a_0 = b_0 - x_0 = b_0 - \frac{ a_0 + b_0 - \delta  }{ 2 } = \\
+			= \frac{ b_0 - a_0 + \delta  }{ 2 } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Если отрезок локализации оказывается достаточно велик, т.е. 
+	\begin{equation} 
+		\begin{aligned} 
+		|b_1 - a_1| < 2 \varepsilon 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	тогда повторяем этот же алгоритм, пока не найдем $ [ a_{i}, b_{i}  ]  $ 
+	\begin{equation} 
+		\begin{aligned} 
+			|b_{i} - a_{i} | < 2 \varepsilon 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	И тогда в качестве ответа берем 
+	\begin{equation} 
+		\begin{aligned} 
+		x^{*} = \frac{ a_{i} + b_{i}  }{ 2 } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Сходимость метода дихотомии относительно уменьшения отрезка локализации
+	находится по формуле:
+	\begin{equation} 
+		\begin{aligned} 
+			R( N ) = \frac{ 1 }{ 2^{\frac{ N }{ 2 } }  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	где $ N $ - количество вычислений функции.
+
+	Неудобно то, что нужно вычислять две точки в середине отрезка.
+	Вполне возможно, что для более конкретных функций есть методы которые требуют
+	меньше вычислений.
+
+	\section{Метод Фибоначчи}
+	
+	Ищя минимум на том же отрезке $ [ a_0,b_0 ]  $ для функции $ f( x )  $  мы будем 
+	искать отрезок локализации с помощью чисел Фибоначчи $ \mathcal{F}_{1} = 1, \mathcal{F}_{2} =1,... $. 
+
+
+	
+	\includegraphics[scale=0.2]{2}
+		
+
+
+	Метод Фибоначчи также как и метод дихотомии заключаеся в последовательном уменьшении
+	отрезка локализации на основе анализов значения функции в двух точках, поиск
+	продолжаем до тех пор, пока длина отрезка неопределенности не станет меньше
+	заданной точности. Отличие от метода дихотомии в правиле выбора этих двух
+	точек, выбирая одну точку, вторая уже будет известна, как вычисленная ранее.
+
+	
+	\begin{equation} 
+		\begin{aligned} 
+			x_0 = a_0 + \frac{ \mathcal{F}_{N-2}  }{ \mathcal{F}_{N}  } ( b_0 - a_0 ) \\
+			y_0 = a_0 + \frac{ \mathcal{F}_{N-1}  }{ \mathcal{F}_{N}  } ( b_0-a_0 ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Выбираем следующий отрезок 
+	
+	\begin{enumerate}
+		\item Если $ f( x_0 ) < f( y_0 )  $, то $ x^{*} \in [ a_0,y_0 ]  $ и обозначаем
+			$ a_1 = a_0, b_1 = y_0 $ 
+		\item Если $ f( x_0 ) \ge f( y_0 )  $, то $ x^{*} \in [ x_0, b_0 ]  $ и обозначаем
+			$ a_1 = x_0, b_1 = b_0 $ 
+	\end{enumerate}
+	Будут выполнены равенства ( дома просчитать ) 
+	\begin{equation} 
+		\begin{aligned} 
+		b_1 - a_1 = y_0 - a_0 = b_0 - x_0
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	и тогда доказать самостоятельно 
+	\begin{equation} 
+		\begin{aligned} 
+			b_1 - a_1 = ( b_0 - a_0 ) \frac{ \mathcal{F}_{N-1}  }{ \mathcal{F}_{N}  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	отрезок локализации помимо точки минимума будет содержать одну из найденных точек
+	$ x_0 $ или $ y_0 $.  
+
+
+	Если взяли отрезок $ [ a_0, y_0 ]  $ то
+	\begin{equation} 
+		\begin{aligned} 
+			x_1 = a_1 + \frac{ \mathcal{F}_{N-3}  }{ \mathcal{F}_{N-1}  } ( b_1 - a_1 ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+
+	В общем виде $ [ a_{i}, b_{i}  ]  $ 
+	\begin{equation} 
+		\begin{aligned} 
+			x_{i+1} = a_{i+1} + \frac{ \mathcal{F}_{N-i-3}  }{ \mathcal{F}_{N-i-1}  } ( b_{i+1} - a_{i+1}   ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Аналогично если берем отрезок $ [ x_i, b_i ]  $ 
+	\begin{equation}
+		\begin{aligned} 
+			y_{i+1} = a_{i+1} + \frac{ \mathcal{F}_{N-i-2}  }{ \mathcal{F}_{N-i-1}  } ( b_{i+1} - a_{i+1}  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+
+	Замечание: после вычисления $ y_{i+1}  $ или $ x_{i+1}  $ удобно пользоваться формулой 
+	\begin{equation} 
+		\begin{aligned} 
+		x_{i+1} = a_{i+1} + b_{i+1} - y_{i+1} 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	чтобы не делать громоздких вычислений.
+
+	После $ N $ вычислений получаем отрезок локализации на котором лежит наш минимум 
+	$ x^{*}_{ \textrm{min} } \in [ a_{N-1}, b_{N-1}  ]  $ и длина этого отрезка равна 
+	\begin{equation} 
+		\begin{aligned} 
+		\frac{ b_0 - a_0 }{ \mathcal{F}_{N}  } \le 2 \varepsilon 
+		\end{aligned}
+		\tag{ * } 
+	\end{equation}
+	отсюда можно найти число, которое при указанной точности должно
+	превышать число Фибоначчи.
+
+	Когда  дойдем до первого и второго числа Фибоначчи получим $ x_{n} = y_{n}  $ - в этом
+	случае надо ввести новую бесконечно малую переменную $ \alpha > 0 $ ( назовем
+	ее числом различимости)  
+	для выбора нового отрезка локализации 
+	\begin{equation}
+		\begin{aligned} 
+			[ y_{n} , y_{n} + \alpha  ] 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	Середину этого отрезка будем называть минимумом 
+	\begin{equation}
+		\begin{aligned} 
+		x^{*}  = y_{n} + \frac{ \alpha  }{ 2  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+
+	Поиск заканчивается также как и в прежнем методе, когда длина отрезка меньше чем
+	\begin{equation} 
+		\begin{aligned} 
+		|b_{n} - a_{n} | \le 2 \varepsilon 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Середину отрезка будем выводить как ответ.
+
+	Замечание: если число $ N $ выбрано неудачно и метод Фибоначчи останавливается
+	но минимум с заданной точностью еще не найден, то в этом случае необходимо задать
+	правильно число Фибоначчи по указанной формуле $ ( * )  $.
+
+	Сходимость метода Фибоначчи относительно уменьшения начального интервала
+	неопределенности будет считаться по формуле: 
+	\begin{equation} 
+		\begin{aligned} 
+			R( N ) = \frac{ 1 }{ \mathcal{F}_{N}  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	где $ N $ - количество вычислений функции.
+
+	Преимущество этого метода в отличие от прежнего: сходится быстрее  и нужно вычислять
+	меньше внутренних точек ( одну, не две ).
+
+
+
+
+
+	
+
+	
+
+
+
+
+
+
+	
+	
+
+\end{document}
+
+

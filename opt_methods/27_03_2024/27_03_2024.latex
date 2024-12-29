@@ -1,0 +1,202 @@
+\documentclass{book}
+
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+	 tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\setmainfont{Roboto-Light}
+
+\begin{document}
+
+	Алгоритм первый для выбора $ \alpha  $.
+	Если задана точка $ x^{( 0 ) }  $ и каким-то образом
+	рассчитаны $ x^{( 1 ) }, x^{( 2 ) }, ..., x^{( k ) }  $.
+
+	Находим 
+	\begin{equation} 
+		\begin{aligned} 
+			x^{( k+1 ) } = x^{( k ) } + \alpha \mathcal{ F }_{k} ( - \nabla f( x^{( k ) }  )  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Можно выбрать $ \alpha \equiv 1 $ или например $ \alpha = \textrm{ const } > 0 $.
+
+
+	Алгоритм второй для выбора $ \alpha  $.
+	Берем $ \delta \in ( 0,1 )  $ и задана точка начального приближения
+	$ x^{( 0 ) }  $ и положим $ \alpha = 1 $.
+	Затем рассчитываем 
+	\begin{equation} 
+		\begin{aligned} 
+			x = x^{( 0 ) } + \alpha \mathcal{ F }_{0} ( -\nabla f( x^{( 0 ) }  )  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	и тогда ищем 
+	\begin{equation} 
+		\begin{aligned} 
+			f( x ) - f( x^{( 0 ) }  ) < - \alpha \delta r \cdot || \nabla f( x^{( 0 ) }  )  ||^2	 
+		\end{aligned}
+		\tag{ * } 
+	\end{equation}
+	Если выполняется ( * ) то полгаем $ x^{( 1 ) } = x $, а если нет,
+	то берем $ \alpha := \frac{ \alpha  }{ 2 }  $ и снова вычисляем $ x $.
+
+	Теорема: Пусть $ x^{( 0 ) }  $ не критическая точка и для матрицы
+	$ \mathcal{ F }_{k}  $ верно неравенство ( 1 )   и для $ H( x^{( 0 ) }  )  $ верно неравенство выведенное ранее из ( 1 ). Тогда после некоторого числа дроблений $ \alpha  $ алгоритм будет корректен.
+
+	Доказательство из формулы Тейлора верно 
+	\begin{equation} 
+		\begin{aligned} 
+			f( x ) - f( x^{( 0 ) }  ) = ( -\alpha \mathcal{ F }_0  \nabla f( x^{( 0 ) }  ), \nabla f( x^{( 0 ) }  )  ) +\\
+			+ \frac{ 1 }{ 2 } ( H( x^{( 0 ) }  ), ( - \alpha \mathcal{ F }_{0} \nabla f( x^{( 0 ) }  )  )^2   ) \le \\
+			\le - \alpha r || \nabla f( x^{( 0 ) }  ) || + \frac{ 1 }{ 2 } \alpha^2  M R^2 || \nabla f( x^{( 0 ) }  ) || \le \\
+			\le - \alpha r ( 1 -  \frac{ \alpha M R^2  }{ 2 r } ) || \nabla f( x^{( 0 ) }  ) || 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	во второй строке в скалярном произведении используем покомпонентное
+	произведение Адамара.
+
+	Должно выполняться 
+	\begin{equation} 
+		\begin{aligned} 
+		1 - \frac{ \alpha M R^2  }{ 2r } > \delta \\
+		1 - \delta > \frac{ \alpha M R^2  }{ 2 r } \\
+			\frac{ ( 1-\delta  ) 2 r }{ M R^2  } > \alpha 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	если последнее неравенство будет выполняться, то алгоритм сходится.
+	Ч.т.д.
+
+
+	Если не указано значение $ \delta  $ берем $ \delta = \frac{ 1 }{ 2 }  $ 
+
+	Третий алгоритм для нахождения $ \alpha  $.
+	Берем $ x^{( 0 ) }  $ и рассчитываем по некоторому правилу
+	$ x^{( 1 ) }, x^{( 2 ) },..., x^{( k ) }   $ определяем
+	точку вида 
+	\begin{equation} 
+		\begin{aligned} 
+			x^{( k+1 ) } = x^{( k ) } + \alpha^{( k ) }  \mathcal{ F }_{k} ( - \nabla f( x^{( k ) }  )  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Надо ввести функцию $ g( \alpha  ) = f( x ) = x^{( k ) } + \alpha^{( k ) } \mathcal{ F }_{k} ( -\nabla f( x^{( k ) }  )  )   $ и это будет
+	функция от одного переменного $ \alpha  $ и ищем минимум
+	функции $ g( \alpha  )  $ на интервале $ ( 0,1 )  $ с помощью
+	уже известных методов одномерной оптимизации. Находим этот минимум $ \alpha^{( k ) }  $.
+
+	И в конце проверяем по условиям, является ли $ x^{( k ) }  $ минимумом или
+	нет. Иначе - продолжаем.
+
+	Теорема: Пусть $ f( x )  $ ограниченна снизу, дифференцируема и верно неравенство Липшица 
+	\begin{equation} 
+		\begin{aligned} 
+			\,\forall x^{\prime}, x^{\prime\prime} \in \mathbb{ R }^{n} \,\forall L> 0: \\
+			||\nabla f( x^{\prime}  ) - \nabla f( x^{\prime\prime}  ) || \le L || x^{\prime} - x^{\prime\prime} || 	
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Тогда для любой начальной точки $ x^{( 0 ) }  $ можно $ x^{( k+1 ) }  $ представить как 
+	\begin{equation} 
+		\begin{aligned} 
+			x^{( k+1 ) } = x^{( k ) } + \alpha ( - \nabla f( x^{( k ) }  )  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	и всегда можно найти такое $ \alpha  $, что 
+	\begin{equation} 
+		\begin{aligned} 
+			\lim_{ k \to \infty  }{ || \nabla f( x^{( k ) }  ) ||   } = 0
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Таким образом строится релаксационная последовательность.
+	Теорема гарантирует сходимость последовательности $ \{   f( x^{( k ) }  ) \}  $ либо к некоторому значению функции которая является минимумом, либо
+	к ифинумуму функции $ f( x )  $ ( если не будет стационарной точки на отрезке )  или она может расходится.
+
+	Доказательства не будет.
+
+	Тогда, если выполняется условие Липшица, и существует некоторая непустая область $ L( C )  $ , такая что $ f( x ) \le C $ где $ \delta \le L ( C )  $, это множество
+	не является пустым и является компактным, тогда 
+	\begin{equation} 
+		\begin{aligned} 
+			\,\forall x^{( 0 ) }  \in L( C ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	наша последовательность будет являться релаксационной.
+
+	Лучше всего использовать последний алгоритм. Итерационная процедура спуска с постояным шагом неудобна, так как при реализации требует знания шага,
+	который выбирается подбором, при этом неудачный выбор шага может привести
+	к нарушению убывания целевой функции, а если взять слишком маленькое $ \alpha  $, то алгоритм может сходится очень долго. Поэтому лучше него будет второй алгоритм - условием завершения алгоритма  будет 
+	\begin{equation} 
+		\begin{aligned} 
+			|| x^{( k+1 ) } - x^{( k ) } || < \varepsilon_{1} \\
+			| f( x^{( k+1 ) }  ) - f( x^{( k ) }  ) < \varepsilon_{2} 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	- продолжаем пока не будут выполнены оба эти условия - здесь
+	$ \varepsilon_{1} > 0, \varepsilon_{2} > 0 $.
+
+	Если этого оказывается недостаточно для нахождения $ \alpha  $, то в
+	качестве завершения будем использовать только условие
+	\begin{equation}
+		\begin{aligned} 
+			|| \nabla f( x^{( k ) }  ) || < \varepsilon_{3} 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	где $ \varepsilon_{3} > 0  $. Последняя расчитанная точка
+	$ x^{( k ) }  $ будем считать точкой минимума функции.
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+

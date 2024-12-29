@@ -1,0 +1,202 @@
+\documentclass{book}
+
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+	 tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\setmainfont{Roboto-Light}
+
+\begin{document}
+
+	Учебники
+	\begin{enumerate}
+		\item Пантелеев А.В., Летова Т.А "Методы оптимизации в примерах и задачах" - основной 
+		\item "Сборник задач по математике методы оптимизации" редакция Ефимова 
+		\item Моисеев "Методы оптимизации" 
+		\item Понтрягин "Математическая теория оптимальных процессов" 
+		\item Сеидова, Калайдина ""
+	\end{enumerate}
+	
+	Методы оптимизации имеют два направления: 
+	
+	\begin{enumerate}
+		\item Методы оптимальности функции - делится еще на условная и безусловную  оптимизации. 
+		\item Методы оптимальности функционалов - делится на вариационное исчисление на оптимальное
+			управление.
+	\end{enumerate}
+	
+	Безусловная оптимизация делится на 
+	\begin{enumerate}
+		\item Методы нахождения минимума функции многих переменных 
+		\item Методы нахождения минимума функции одной переменной
+	\end{enumerate}
+	
+	Условная оптимизация делится на 
+	\begin{enumerate}
+		\item Линейное программирование 
+		\item Нелинейное программирование
+	\end{enumerate}
+	
+	Нелинейное программирование делится на 
+	\begin{enumerate}
+		\item Квадратичное 
+		\item Выпуклое
+	\end{enumerate}
+	
+	Будем рассматривать сначала безусловную оптимизацию с функциями одной переменной.
+
+	\chapter{Безусловная оптимизация}
+	
+	\section{Одномерный поиск}
+	
+	\subsection{Классический алгоритм}
+	
+	
+	\begin{enumerate}
+		\item Постановка задачи. Пусть дана функция $ f( x )  $ на отрезке $ [ a,b ]  $ и
+			требуется найти
+			минимум этой функции на этом отрезке. 
+
+			Замечание: задача нахождения максимума
+			функции сводится к задаче поиска минимума заменой $ f( x )  $, потому рассматриваем
+			только задачи минимума. Замена будет иметь вид: $ g( x ) = -f( x )  $ - и ищем теперь
+			минимум $ g( x )  $.
+
+			Теорема ( необх. и дост. условие ( безусловной оптимизации )
+			экстремума функции одной переменной  )
+			: Точка $ x^{ * }  $ - локальный минимум ( или максимум ). Для того, чтобы функция
+			$ f( x )  $ имела в точке $ x^{ * }  $ имела локальный минимум ( или максимум ) на
+			$ ( a,b )  $ неоходимо, чтобы $ f^{ \prime } ( x^{ * }   ) =0 $.
+
+			Достаточно, что если $ f^{ ( n )  } ( x^{ * }  ) \ne 0 $, где эта производная имеет
+			нечетный порядок ( $ n = 2k+1, k=0,1,2,...$ ), то в точке $ x^{ * }  $ нет ни
+			минимума ни максимума.
+
+			Если $ f^{ ( n )  } ( x^{ * }  ) \ne 0 $ и в точке $ x^{ * }  $ имеет четный порядок
+			(  $ n = 2k, k=1,2,... $ ), то в точке $ x^{ * }  $ имеем минимум, если 
+			$ f^{ ( n )  } ( x^{ * }  ) > 0 $, или максимум, если меньше нуля.
+
+			Док-во: Необходимое условие: От противного: Предположим, что точка $ x^{ * }  $ -
+			точка минимума ( максимума ). Проверяем: 
+			\begin{equation} 
+				\begin{aligned} 
+					f^{ \prime } ( x^{ * }  ) \ne 0
+				\end{aligned}
+				\nonumber
+			\end{equation}
+			Два случая: 
+			\begin{equation}
+				\begin{aligned} 
+					f^{ \prime } ( x^{ * }  ) > 0 \\
+					\,\forall x \in U_{\Delta h} ( x^{ * }  ): x = x^{ * } + \Delta h \\
+					\Delta h \to 0 \\
+					\\
+					f( x ) = f( x^{ * }  ) + \frac{ f^{ \prime } ( x^{ * }  )  }{ 1! } ( x-x^{ * }  )  + ... + \\
+					+ \frac{ f^{ ( n )  } ( x^{ * }  )  }{ n! } ( x-x^{ * }  ) + o( x-x^{ * }  )^n  \\
+					\\
+					f( x ) - f( x^{ * }  ) = f^{ \prime } ( x^{ * }  ) ( x-x^{ * }  ) + o( x-x^{ * }  )^2 \\
+					f^{ \prime } ( x^{ * }  ) \Delta h = f( x ) - f( x^{ * }  ) \\
+					f^{ \prime } (x^{ * }  ) > 0 ; \Delta h < 0 ; f( x ) - f( x^{ * }  ) < 0 
+				\end{aligned}
+				\nonumber
+			\end{equation}
+			Пришли к противоречию
+			\begin{equation} 
+				\begin{aligned} 
+					f( x ) < f( x^{ * }  ) 
+				\end{aligned}
+				\nonumber
+			\end{equation}
+			Т.к. $ x^{ * }  $ - точка минимума, то должно было быть 
+			\begin{equation} 
+				\begin{aligned} 
+					f( x ) > f( x^{ * }  ) 
+				\end{aligned}
+				\nonumber
+			\end{equation}
+			Аналогично при $ f^{ \prime }( x ) < 0   $ берем $ \Delta h > 0 $.
+
+			Достаточность - доказать самостоятельно.
+			Ч.т.д.
+
+
+
+
+
+	\end{enumerate}
+
+	\subsection{Классический алгоритм нахождения глобального минимума}
+
+	
+	\begin{enumerate}
+		\item Вычисляем $ f^{ \prime } ( x )  $ 
+		\item Решаем уравнение $ f^{ \prime } ( x ) = 0 $ ( необходимое условие ) - находим
+			стационарные точки. 
+		\item В стационарных точках используем достаточное условие и определяем точки
+			локального минимума ( максимума ). 
+		\item Вычисляем значение функции в этих точках и выбираем точку, где значении
+			функции меньше ( больше ) всего - обозначим итог $ x_{1}  $ . 
+		\item В точках, где производная не существует ( критические точки ), вычисляем значение функции.
+		\item Выбираем наименьшую ( наибольшую ) точку среди критических - обозначим итог $ x_2 $. 
+		\item Вычисляем значение функции на концах отрезка $ [ a,b ]  $ и выбираем наименьшее ( наибольшее )  из них - обозначим итог $ x_3 $. 
+		\item Ищем минимум из $ x_1,x_2,x_3 $ - получим итог $ x^{ * }  $ - точку глобального минимума ( максимума ). 
+	\end{enumerate}
+	
+	Пусть дан цилиндр с радиусом основания $ R $ и высотой $ H $. Задана полная площадь цилиндра
+	$ S $. Найти максимальный объем цилиндра.
+
+	
+	\begin{equation} 
+		\begin{aligned} 
+		V = \pi R^2 H \\
+			S = 2 S_1 + S_2 = 2 \pi R^2 + 2 \pi R H \\
+			H = \frac{ S - 2 \pi R^2  }{ 2 \pi R } \\
+			V = \pi R^2 \frac{ S - 2 \pi R^2  }{ 2 \pi R } = \frac{ R }{ 2 } ( S - 2 \pi R^2  ) \\
+			V^{\prime } = \frac{ 1 }{ 2 } ( S-2\pi R^2  ) + \frac{ R }{ 2 } ( -4 \pi R ) = \frac{ 1 }{ 2 } ( S - 6 \pi R^2  ) \\
+			S - 6 \pi R^2 = 0 \\
+			R = \pm \sqrt{ \frac{ S }{ 6 \pi  }  } \\
+			R > 0; R = + \sqrt{ \frac{ S }{ 6 \pi  }  } \\
+			V^{\prime \prime } = -6\pi R < 0 \textrm{ - имеем точку максимума} \\
+			\frac{ 2 R }{ H } = ? \textrm{ - выяснить } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+
+	
+	
+	
+
+\end{document}
+
+

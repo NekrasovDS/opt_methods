@@ -1,0 +1,228 @@
+\documentclass{book}
+
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+	 tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\setmainfont{Roboto-Light}
+
+\begin{document}
+
+	\chapter{Многомерная оптимизация функции многих переменных}
+	
+	Определение: Произвольное $ n $ -мерное пространство будем
+	называть евклидовым, если мы на нем введем скалярное произведение.
+
+	
+	\begin{equation} 
+		\begin{aligned} 
+			( a,b ) = ( b,a ) \\
+			( \lambda a, b ) = \lambda ( a,b ) \\
+			( a,a ) \ge 0 ; ( a,a ) = 0 \,\Leftrightarrow\, a = 0 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+
+	Определение: Нормированным пространством будем называть
+	евклидово пространство с введеной на нем нормой вида 
+	\begin{equation} 
+		\begin{aligned} 
+			||x|| = \sqrt{ ( x,x )  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Свойства 
+	\begin{equation} 
+		\begin{aligned} 
+		||x|| \ge 0; ||x|| = 0 \,\Leftrightarrow\, x = 0 \\
+		|| \lambda x || = | \lambda | \cdot ||x|| \\
+		||x + y|| \le ||x|| + ||y||
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Теорема: Всякое скалярное умножение в евклидовом пространстве
+	определяется по формуле 
+	\begin{equation}
+		\begin{aligned} 
+			||x|| = \sqrt{ ( x,x )  } = \sqrt{ \sum_{ i=1 }^{ n }{ x_{i}^2  }  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Если менять векторы на квадратные матрицы, то добавится еще аксиома: 
+	\begin{equation} 
+		\begin{aligned} 
+		||A B|| \le ||A|| \cdot ||B|| 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Норма матрицы - неотрицательное число. 
+
+	Из последней аксиомы, если взять вместо одной матрицы вектор, можно получить
+	\begin{equation} 
+		\begin{aligned} 
+		||A|| = \sup_{||x|| \ne 0} \frac{ ||A x|| }{ ||x|| }   
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	- из этого условия будет следовать условие согласованности
+	нормы матрицы и нормы вектора, т.е. 
+	\begin{equation} 
+		\begin{aligned} 
+		||A x|| \le ||A|| \cdot ||x|| 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Определение: функция $ f $ будет называться квадратичной формой, если
+	\begin{equation} 
+		\begin{aligned} 
+			f( \overline{x}  ) = f( x_1,x_2,...,x_{n}  ) = \sum_{ i=1; j=1 }^{ n }{ a_{i,j} x_{i} x_{j}  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Можно привести к виду 
+	\begin{equation} 
+		\begin{aligned} 
+			f( \overline{x}  ) = ( ( \overline{x}  )^{T}, A \overline{x}   ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	или можно заменой 
+	\begin{equation} 
+		\begin{aligned} 
+		\sum_{ i=1; j=1}^{ n }{ a_{i,j} x_{i} x_{j}   } = \sum_{ i=1 }^{ n }{ q_{i}^{2}   }  + 2 \sum_{ i,j=1 }^{ n }{ b_{i,j} q_{i} q_{j}  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Определение: матрицы $ A $ будем называть неотрицательно определенными,
+	если $ \,\forall \overline{x}  \in E^{n}  ( ( \overline{x}  )^{T} , A \overline{x}   ) \ge 0 $ ,
+	положительно - если $ > 0 $, и отрицательно - если $  < 0 $  
+
+
+	Диагональный ( нормальный )  вид матрицы -
+	с собственными значениями на диагонали, т.е. для положительно определенной
+	\begin{equation} 
+		\begin{aligned} 
+			( ( \overline{x}  )^{T}, A \overline{x}  ) = \sum_{ i=1 }^{ n }{ \lambda_{i} x_{i}^2  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+
+	Канонический - с единицами на диагонали,
+	т.е. заменой с нормального вида для положительного
+	\begin{equation} 
+		\begin{aligned} 
+		y_{i} = \sqrt{ \lambda_{i}  } x_{i} 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Для отрицательного общий вид 
+	\begin{equation} 
+		\begin{aligned} 
+			( -1 )^{n} \sum_{ i=1 }^{ n }{ y_{i}^2  } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Теорема: симметричная матрица $ A $ является положительно определенной
+	когда все определители главных миноров матрицы $ A $ неотрицательны. ( Критерий Сильвестра ) 
+
+	Матрица будет отрицательно определенной, если знаки определителей главных миноров чередуются.
+
+	Определение: Линией уровня будем называть множество точек $ f( \overline{x}  ) = \textrm{Const } = C $ например $ f( x_1,x_2 ) = x_1^2 + 4 x_2^2 = 4 $
+	- эллипс.
+
+	\section{Градиент функции и матрица Гессе}
+	
+	Пусть задана функция $ f: E^{n} \to \mathbb{R}  $ - наша задача
+	найти миниммы функции в $ E^{n}  $
+
+	Определение: градиентом функции в точке $ x^{*}  $ будет 
+	\begin{equation} 
+		\begin{aligned} 
+			\nabla f( x^{*}  ) = \left( \frac{\partial f( x^{*}  )  }{\partial x_1 }, ..., \frac{\partial f( x^{*}  )  }{\partial x_{n}  }    \right) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+
+	Точка $ x^{*} \in E^{n}   $ в которой $ \nabla f( x^{*}  ) = 0  $ будет
+	являться стационарной точкой.
+
+	Матрицей Гессе будем называть матрицу вторых производных функции 
+	\begin{equation} 
+		\begin{aligned} 
+			f^{\prime\prime } ( x ) = \left( \begin{array}{cccc} 
+			\frac{\partial^2 f }{\partial x_1^2  }  & \frac{\partial^2 f }{\partial x_1 \partial x_2 }  & ...  & \frac{\partial^2  f }{\partial x_1 \partial x_{n}   }   \\ 
+			... & ... & ... & ...  \\
+			... & ... & ... & ... \\
+			\frac{\partial^2 f }{\partial x_1 \partial x_{n}  }  & ... & ... & ...
+			\end{array} \right) 
+			= H
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	(  она симметричная ) 
+
+	Теорема: ( Необходимое условие экстремума функции  )
+	Пусть дана $ f: E^{n} \to \mathbb{R}  $ ( действует из евклидового пространства во множество вещественных чисел ) - она дифференцируемая в точке $ x^{*} \in E^{n}  $ - тогда если $ x^{*}  $ - это точка безусловного локального экстремума,
+	то градиент функции в этой точке равен нулю.
+
+	Теорема: ( Необходимое условие экстремума второго порядка )
+	Пусть та же функция $ f $ уже дважды дифференцируема в $ x^{*}  $ -
+	если $ x^{*}  $ - точка безусловного локального минимума функции $ f( x )  $
+	то матрица Гессе в точке $ x^{*}  $ будет неотрицательно определена.
+	Если это точка локального максимума, то матрица Гессе будет неположительно
+	определена.
+
+
+
+
+
+
+
+
+
+	
+
+\end{document}
+
+

@@ -1,0 +1,234 @@
+\documentclass{book}
+
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+	 tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\setmainfont{Roboto-Light}
+
+\begin{document}
+
+	\chapter{Численная многомерная безусловная оптимизация}
+	
+	Рассматриваем функции без ограничений.
+	
+	Она основывается на построении
+	последовательностей точек $ \{ x^{(  k)}  \}  $ в
+	$ \mathbb{R}^{n}  $ которые будут сходится к $ x^{*}  $.
+
+	Нужно задать правило перехода к точке $ x^{( k+1)}   $ и построить
+	последовательность, которая будет обладать следующими свойствами:
+	
+	\begin{equation}
+		\begin{aligned} 
+			\textrm{1) } \lim_{ k \to \infty  }{ x^{( k ) }  } = x^{*} \\
+			\textrm{2) } f( x^{( 0 ) }  ) > f( x^{( 1 ) }  ) > ...
+			> f( x^{( k ) }  ) > f( x^{( k+1 ) }  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Если
+	\includegraphics[scale=0.2]{1}
+	то можно считать 
+	\begin{equation} 
+		\begin{aligned} 
+			x^{( k+1 ) } = x^{( k ) } + S^{( k ) } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+
+	Последовательность, которая будет обладать такими свойствами,
+	будет называться релаксиционной или итерационной.
+
+	Вектор $ S^{( k ) }  $ будем называть направлением спуска
+	функции $ f( x )  $, если существует $ \alpha^{0} > 0 $ такое что для любого
+	$ \alpha \in ( 0, \alpha^{( 0 ) }   )  $ верно 
+	\begin{equation} 
+		\begin{aligned} 
+			f( x^{( k ) } + \alpha S^{( k ) }  ) < f( x^{( k ) }  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	Основная задача методов спуска: 
+	подобрать правильно параметры $ S^{( k ) }  $ и
+	$ \alpha^{( k ) }   $ обеспечив при этом убывание целевой функции
+	в точках $ x^{( k ) }  $.
+
+	Лемма 1: ( Направление спуска безусловной оптимизации ) 
+	Пусть $ x^{( k ) }  $ не является критической точкой.
+	Тогда в этой точке может существовать бесконечно много
+	направлений спуска. Для того, чтобы вектор $ S $ был
+	направлением спуска достаточно, чтобы 
+	\begin{equation} 
+		\begin{aligned} 
+			( \nabla f( x^{( k ) }  ), S  ) < 0 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	Доказательство:
+	Определим току вида 
+	\begin{equation} 
+		\begin{aligned} 
+			x = x^{( k ) } + \alpha^{( k ) } S^{( k ) } 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	таким образом задали альфа-окрестность точки $ x^{( k ) }  $.
+
+	Используя формулу Тейлора 
+	\begin{equation} 
+		\begin{aligned} 
+			f( x ) - f(x^{( k ) }  ) = ( \nabla f( x^{( k ) }  ), ( x-x^{( k ) }  )  ) + o( ||x - x^{( k ) } ||^2  ) = \\
+			=  \alpha ( \nabla f( x^{( k ) }  ),  S^{( k ) }  ) + o( \alpha^2   ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	$ o( \alpha^2  )  \to 0 $ и скалярное произведение с коэффицентом
+	меньше нуля. Тогда и правая часть меньше нуля.
+	Т.е. $ S $ - направление спуска.
+	ч.т.д.
+
+	
+	\includegraphics[scale=0.2]{2}
+
+	Замечу, что чем меньше скалярное произведение, тем 
+	ближе к минимуму будет шаг.
+
+	Нетрудно доказать, что
+	
+	\begin{equation} 
+		\begin{aligned} 
+			- || \nabla f( x^{( k ) }  )  || \cdot ||S^{( k ) } || \le ( \nabla f( x^{( k ) } , S^{( k ) }  )  ) \le  || \nabla f( x^{( k ) }  )  || \cdot ||S^{( k ) } || 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+
+	надо подобрать некую матрицу $ \mathcal{ F }_k   $ которая
+	будет удовлетворять неравенству 
+	\begin{equation} 
+		\begin{aligned} 
+		\,\forall y \in E^{n}:  r ||y||^2  \le
+			( \mathcal{ F }_k y, y   ) \le R ||y||^2
+		\end{aligned}
+		\tag{ 1 } 
+	\end{equation}
+	где $ 0 < r < R $,
+	такую что будет приближать равенство 
+	\begin{equation} 
+		\begin{aligned} 
+			S^{( k ) } = - \nabla f( x^{( k ) }  ) 
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	
+	т.е. будем строить по формуле
+	\begin{equation} 
+		\begin{aligned} 
+			S^{( k ) } = - \mathcal{ F }_k \cdot f( x^{( k ) }  )
+		\end{aligned}
+		\tag{ 2 } 
+	\end{equation}
+
+	$ \mathcal{ F }_{k}  $ - матрица спуска.
+	
+	Лемма 2: Пусть $ x^{( k ) }  $ - не критическая точка, и система
+	матриц $ \mathcal{ F }_{k}  $ удовлетворяет неравенству ( 1 ) 
+	тогда вектор $ S^{( k ) }  $ полученный по ( 2 ) 
+	является направлением спуска.
+
+	Доказательство: аналогично по формуле Тейлора
+	Ч.т.д.
+
+	Отсюда, из предыдущих лемм, будем искать $ x^{( k+1 ) }  $ как 
+	\begin{equation} 
+		\begin{aligned} 
+			x^{( k+1 ) } = x^{( k ) } - \alpha^{( k ) }  \mathcal{ F }_{k} \nabla f( x^{( k ) }  ) 
+		\end{aligned}
+		\tag{ 3 } 
+	\end{equation}
+
+	При выборе метода - нужно подобрать $ \alpha^{( k ) }  $ и $ \mathcal{ F }_{k}  $.
+
+	Важно при использовании ( 3 ) указать способ выбора матрицы $ \mathcal{ F }_{k}  $, который дает новый метод, а также нужно указать алгоритм выбора шага
+	$ \alpha^{( k ) }  $, который предусматривает новый алгоритм метода.
+
+	\section{Способы выбора матрицы спуска}
+	
+	Если $ \mathcal{ F }_{k} = E $ то по ( 1 ) будем иметь $ r = R = 1 $ 
+	- методы такого вида будем назвывать градиентными.
+
+	Второй вариант:
+	Пусть функция дважды непрерывно-дифференцируема, тогда
+	матрица Гессе будет удовлетворять ( 1 ). 
+	\begin{equation} 
+		\begin{aligned} 
+			m ||y||^2 \le ( H( x^{( k ) } ) y, y  ) \le M ||y||^2  
+		\end{aligned}
+		\nonumber
+	\end{equation}
+	$ 0 < m < M < 1 $ 
+
+	В таком случае если взять
+	$ \mathcal{ F }_{k} = ( H( x^{( k ) }  )  )^{( -1 ) }  $,
+	то тогда $ r = \frac{ 1 }{ M }  $ и $ R = \frac{ 1 }{ m }  $ .
+
+	Методы с таким выбором $ \mathcal{ F }_{k}  $ назовем 
+	методами Ньютона или обобщенными методами Ньютона.
+
+	Третий вариант: В том случае когда в начале используем
+	градиентный метод, а далее - Ньютоновские, то такие
+	методы называем методами Дэвида-Фитчера-Гауэлла.
+
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+	
+
+
+\end{document}
+
+
